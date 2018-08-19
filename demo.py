@@ -10,7 +10,11 @@ import async_timeout
 import voluptuous as vol
 
 from homeassistant.const import (ATTR_TEMPERATURE, CONF_API_KEY, CONF_ID, TEMP_CELSIUS, TEMP_FAHRENHEIT)
-from homeassistant.components.climate import (ATTR_CURRENT_HUMIDITY, STATE_HEAT, STATE_COOL, STATE_IDLE, STATE_AUTO, ClimateDevice, PLATFORM_SCHEMA)
+from homeassistant.components.climate import (
+    ClimateDevice, ATTR_CURRENT_HUMIDITY, STATE_HEAT, STATE_COOL, STATE_IDLE, STATE_AUTO, PLATFORM_SCHEMA, 
+    SUPPORT_TARGET_TEMPERATURE, SUPPORT_TARGET_TEMPERATURE_HIGH, SUPPORT_TARGET_TEMPERATURE_LOW, SUPPORT_TARGET_HUMIDITY, 
+    SUPPORT_TARGET_HUMIDITY_HIGH, SUPPORT_TARGET_HUMIDITY_LOW, SUPPORT_FAN_MODE, SUPPORT_OPERATION_MODE, SUPPORT_HOLD_MODE, 
+    SUPPORT_SWING_MODE, SUPPORT_AWAY_MODE, SUPPORT_AUX_HEAT, SUPPORT_ON_OFF )
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.util.temperature import convert as convert_temperature
@@ -60,7 +64,12 @@ class DemoClimate(ClimateDevice):
         self._away_mode = False
         self._aux_heat = False
         self._temperature_unit = TEMP_CELSIUS
+        self._support_flags = SUPPORT_TARGET_TEMPERATURE | SUPPORT_TARGET_TEMPERATURE_HIGH | SUPPORT_TARGET_TEMPERATURE_LOW | SUPPORT_TARGET_HUMIDITY | SUPPORT_TARGET_HUMIDITY_HIGH | SUPPORT_TARGET_HUMIDITY_LOW | SUPPORT_FAN_MODE | SUPPORT_OPERATION_MODE | SUPPORT_HOLD_MODE | SUPPORT_SWING_MODE | SUPPORT_AWAY_MODE | SUPPORT_AUX_HEAT
 
+    @property
+    def supported_features(self):
+        """Return the list of supported features."""
+        return self._support_flags
 
     @property
     def name(self):
